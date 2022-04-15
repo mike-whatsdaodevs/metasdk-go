@@ -7,4 +7,6 @@ import (
 
 func init() {
     beego.Router("/", &controllers.MainController{})
+    beego.Router("/miner/nftlist", &controllers.ListController{},"get:List")
+    beego.Router("/miner/nftadd", &controllers.AddController{},"get:AddWl")
 }

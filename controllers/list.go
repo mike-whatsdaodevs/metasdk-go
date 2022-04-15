@@ -20,6 +20,8 @@ const PageNum = 50
 func (c *ListController) List() {
 	page, _ := c.GetInt("page")
 
+	address := c.GetString("address")
+
 	skip := 0;
 
 	if page <= 0 {
@@ -28,9 +30,9 @@ func (c *ListController) List() {
 
 	skip = (page - 1) * PageNum;
 
-	total := int(Model.GetListNum())
+	total := int(Model.GetListNum(address))
 
-	list := Model.GetList(PageNum, skip)
+	list := Model.GetList(PageNum, skip, address)
 	
 	res := Res{
 		CurrentPage : page,

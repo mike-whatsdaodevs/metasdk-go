@@ -13,7 +13,7 @@ func (n *NFT) TableName() string {
 }
 
 // get NFT list
-func GetList(take, skip int) (list []NFT) {
+func GetList(take, skip int, address string) (list []NFT) {
     list = []NFT{}
 
 	o := orm.NewOrm()
@@ -24,18 +24,23 @@ func GetList(take, skip int) (list []NFT) {
 		From("NFT").
 		Where("status > 0")
 
+
+    if address != "" {
+        qb.And("address=?")
+    }
+
 	qb.OrderBy("token_id ASC, id ASC").
         Limit(take).Offset(skip)
 
     sql := qb.String()
 
 
-	o.Raw(sql).QueryRows(&list)
+	o.Raw(sql, address).QueryRows(&list)
 
 	return list
 }
 
-func GetListNum() (num int64) {
+func GetListNum(address string) (num int64) {
 
     o := orm.NewOrm()
 
@@ -45,10 +50,14 @@ func GetListNum() (num int64) {
         From("NFT").
         Where("status > 0")
 
+    if address != "" {
+        qb.And("address=?")
+    }
+
     sql := qb.String()
 
 
-    err := o.Raw(sql).QueryRow(&num)
+    err := o.Raw(sql, address).QueryRow(&num)
     if err == nil {
         fmt.Println("user nums: ", num)
     }

@@ -8,7 +8,7 @@ import (
 type NFT struct {
     Id          int    `orm:"column(id)" json:"id"`
     Address     string `orm:"column(address);description(用户地址)" json:"address"`
-    TokenId     int `orm:"column(amount);description(数量)" json:"token_id"`
+    TokenId     int `orm:"column(token_id);description(数量)" json:"token_id"`
     Status      uint8  `orm:"column(status);description(状态)" json:"status"`
     CreatedAt   string `orm:"description(创建时间);column(created_at)" json:"created_at"`
 }
