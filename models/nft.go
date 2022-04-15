@@ -58,7 +58,7 @@ func GetListNum() (num int64) {
 }
 
 
-func ReadAndCreateOrUpdate(address string, tokenId uint64) (bool){
+func ReadAndCreateOrUpdate(address string, tokenId int) (bool){
     o := orm.NewOrm()
     
     id := GetTokenId(tokenId);
@@ -85,12 +85,12 @@ func ReadAndCreateOrUpdate(address string, tokenId uint64) (bool){
 }
 
 
-func InsertNFTr(address string, amount uint64) {
+func InsertNFT(address string, tokenId int) {
     o := orm.NewOrm()
 
     st := new(NFT)
     st.Address = address
-    st.Amount = amount
+    st.TokenId = tokenId
     st.Status = 1
     timestr := time.Now().Format("2006-01-0215:04:05")
     st.CreatedAt = timestr
@@ -99,37 +99,8 @@ func InsertNFTr(address string, amount uint64) {
 
 }
 
-func GetAddressRand(address string, amount uint64) (num int) {
-    o := orm.NewOrm()
 
-    id := GetAddressId(address);
-    st := NFT{Id: id, Address: address}
-
-    if id == 0 || o.Read(&st) != nil {
-        return 0;
-    }
-
-
-    qb, _ := orm.NewQueryBuilder("mysql")
-
-    qb.Select("count(*) as num").
-        From("NFT").
-        Where("status > 0").
-        And("(amount > ? OR (amount = ? AND id < ?))")
-
-    sql := qb.String()
-
-    err := o.Raw(sql, amount, amount, id).QueryRow(&num)
-    if err == nil {
-        fmt.Println("user nums: ", num)
-    }
-
-    return num + 1
-}
-
-
-
-func GetTokenId(tokenId uint) (num int) {
+func GetTokenId(tokenId int) (num int) {
     o := orm.NewOrm()
 
     qb, _ := orm.NewQueryBuilder("mysql")
@@ -142,7 +113,7 @@ func GetTokenId(tokenId uint) (num int) {
     sql := qb.String()
 
 
-    err := o.Raw(sql, address).QueryRow(&num)
+    err := o.Raw(sql, tokenId).QueryRow(&num)
     if err == nil {
         fmt.Println("user nums: ", num)
     }

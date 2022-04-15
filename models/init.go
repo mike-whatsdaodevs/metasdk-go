@@ -22,7 +22,7 @@ func init() {
     orm.Debug = true
     // // // register model
     // orm.RegisterModel(new(Stu))
-    orm.RegisterModel(new(Stake))
+    orm.RegisterModel(new(NFT))
 
     orm.RunSyncdb("default", false, true)
 
